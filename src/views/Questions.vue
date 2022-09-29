@@ -10,7 +10,7 @@
         id="page-prev"
         :to="{ name: 'Questions', query: { page: page - 1 } }"
         rel="prev"
-        v-if="page != 1"
+        v-if="page !== 1"
         >&#60; Предыдущий
       </router-link>
 
@@ -40,12 +40,13 @@ export default {
     return {
       questions: [],
       totalQuestions: 0,
+      limit: 10,
     };
   },
   created() {
     this.questions = null;
     watchEffect(() => {
-      QuestionService.getQuestions(10, this.page)
+      QuestionService.getQuestions(this.limit, this.page)
         .then((response) => {
           this.questions = response.data;
           this.totalQuestions = response.headers["x-total-count"];
@@ -57,7 +58,7 @@ export default {
   },
   computed: {
     hasNextPage() {
-      let totalPages = Math.ceil(this.totalQuestions / 2);
+      let totalPages = Math.ceil(this.totalQuestions / this.limit);
       return this.page < totalPages;
     },
   },
