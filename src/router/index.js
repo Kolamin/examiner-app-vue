@@ -1,11 +1,12 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Questions from "../views/Questions";
+import Questions from "@/views/Questions";
 
 const routes = [
   {
-    path: "/questions",
-    name: "questions",
+    path: "/",
+    name: "Questions",
     component: Questions,
+    props: (route) => ({ page: parseInt(route.query.page) || 1 }),
   },
 ];
 

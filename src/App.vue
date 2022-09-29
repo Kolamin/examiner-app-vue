@@ -1,6 +1,10 @@
 <template>
-  <nav><router-link to="/questions">Questions</router-link> |</nav>
-  <router-view />
+  <div>
+    <div>
+      <router-link :to="{ name: 'Questions' }">Questions</router-link>
+    </div>
+    <router-view />
+  </div>
 </template>
 
 <style scoped></style>
