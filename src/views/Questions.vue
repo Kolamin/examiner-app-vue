@@ -5,7 +5,7 @@
       :question="question"
       :key="question.id"
     />
-    <div class="pagination">
+    <!--    <div class="pagination">
       <router-link
         id="page-prev"
         :to="{ name: 'Questions', query: { page: page - 1 } }"
@@ -21,6 +21,17 @@
         v-if="hasNextPage"
         >Следующий &#62;
       </router-link>
+    </div>-->
+    <div class="page__wrapper">
+      <div
+        v-for="pageNumber in totalPages"
+        :key="pageNumber"
+        class="page"
+        :class="{ 'current-page': page === pageNumber }"
+        @click="changePage(pageNumber)"
+      >
+        {{ pageNumber }}
+      </div>
     </div>
   </div>
 </template>
@@ -41,6 +52,7 @@ export default {
       questions: [],
       totalQuestions: 0,
       limit: 10,
+      totalPages: 0,
     };
   },
   created() {
@@ -50,6 +62,7 @@ export default {
         .then((response) => {
           this.questions = response.data;
           this.totalQuestions = response.headers["x-total-count"];
+          this.totalPages = Math.ceil(this.totalQuestions / this.limit);
         })
         .catch((error) => {
           console.log("There was an error:", error.response);
@@ -60,6 +73,11 @@ export default {
     hasNextPage() {
       let totalPages = Math.ceil(this.totalQuestions / this.limit);
       return this.page < totalPages;
+    },
+  },
+  methods: {
+    changePage(pageNumber) {
+      this.$router.push({ name: "Questions", query: { page: pageNumber } });
     },
   },
 };
@@ -86,5 +104,21 @@ export default {
   margin-top: 30px;
   margin-bottom: 30px;
   text-align: right;
+}
+
+.page__wrapper {
+  display: flex;
+  margin-top: 15px;
+}
+
+.page {
+  border: 1px solid black;
+  padding: 10px;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.current-page {
+  border: 4px solid teal;
 }
 </style>
