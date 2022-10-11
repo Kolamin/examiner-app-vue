@@ -1,10 +1,19 @@
 <template>
-  <div>
-    <div>
-      <router-link :to="{ name: 'Questions' }">Questions</router-link>
-    </div>
+  <div class="container">
+    <Navbar />
     <router-view />
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+}
+</style>
+<script>
+import Navbar from "@/components/Navbar";
+export default {
+  components: { Navbar },
+};
+</script>

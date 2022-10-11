@@ -55,17 +55,21 @@ export default {
 
 <style scoped>
 .div1 {
-  padding: 10px;
   border-bottom: solid teal;
 }
 .div2 {
   margin: 10px;
 }
 .btn {
+  margin-bottom: 10px;
   padding: 10px 15px;
   background: none;
   color: teal;
   border: 1px solid teal;
   cursor: pointer;
+}
+
+label {
+  display: contents;
 }
 </style>

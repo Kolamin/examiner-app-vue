@@ -48,10 +48,6 @@ export default {
 </script>
 
 <style scoped>
-.pagination {
-  display: flex;
-  width: 290px;
-}
 .pagination a {
   flex: 1;
   text-decoration: none;
