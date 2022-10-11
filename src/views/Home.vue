@@ -7,8 +7,14 @@
 </template>
 
 <script>
+import { useStore } from "vuex";
 export default {
-  name: "Home",
+  setup() {
+    const store = useStore();
+
+    console.log(store.state.user);
+    store.commit("setUser", "yoshi");
+  },
 };
 </script>
 
