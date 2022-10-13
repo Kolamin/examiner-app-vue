@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!isQuestionLoading">
     <Question
       v-for="question in questions"
       :question="question"
@@ -7,6 +7,7 @@
     />
     <Paginate :total-pages="totalPages" :page="page" />
   </div>
+  <div v-else>Идет загрузка...</div>
 </template>
 
 <script>
@@ -28,11 +29,13 @@ export default {
       totalQuestions: 0,
       limit: 10,
       totalPages: 0,
+      isQuestionLoading: false,
     };
   },
   created() {
     this.questions = null;
     watchEffect(() => {
+      this.isQuestionLoading = true;
       QuestionService.getQuestions(this.limit, this.page)
         .then((response) => {
           this.questions = response.data;
@@ -41,6 +44,9 @@ export default {
         })
         .catch((error) => {
           console.log("There was an error:", error.response);
+        })
+        .finally(() => {
+          this.isQuestionLoading = false;
         });
     });
   },
