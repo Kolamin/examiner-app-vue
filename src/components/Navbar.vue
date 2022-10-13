@@ -2,16 +2,16 @@
   <nav>
     <h1>Проверка знаний</h1>
     <!--    for all users-->
-    <div>
+    <div v-if="user">
       <router-link to="/">Home</router-link>
     </div>
     <!--    for logged in users-->
-    <div>
-      <span>Logged in as...</span>
-      <button>Logout</button>
+    <div v-if="user">
+      <span>Logged in {{ user.email }}</span>
+      <button @click="handleClick">Logout</button>
     </div>
     <!--    for logged out users-->
-    <div>
+    <div v-if="!user">
       <router-link to="/login">Login</router-link>
       <router-link to="/signup">Signup</router-link>
     </div>
@@ -19,7 +19,21 @@
 </template>
 
 <script>
+import { useStore } from "vuex";
+import { computed } from "vue";
+
 export default {
-  name: "Navbar",
+  setup() {
+    const store = useStore();
+
+    const handleClick = () => {
+      store.dispatch("logout");
+    };
+
+    return {
+      handleClick,
+      user: computed(() => store.state.user),
+    };
+  },
 };
 </script>

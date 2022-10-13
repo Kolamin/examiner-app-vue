@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="user">
     <router-link to="/iquestions"
       >А.1. Основы промышленной безопасности</router-link
     >
@@ -8,11 +8,14 @@
 
 <script>
 import { useStore } from "vuex";
+import { computed } from "vue";
 export default {
   setup() {
     const store = useStore();
 
-    console.log(store.state.user);
+    return {
+      user: computed(() => store.state.user),
+    };
   },
 };
 </script>
