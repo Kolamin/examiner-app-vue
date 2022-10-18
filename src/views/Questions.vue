@@ -1,3 +1,4 @@
+<!--
 <template>
   <div v-if="!isQuestionLoading">
     <Question
@@ -18,7 +19,7 @@ import Paginate from "@/components/Paginate";
 
 export default {
   name: "Questions",
-  props: ["page"],
+  props: ["page", "name"],
   components: {
     Paginate,
     Question,
@@ -36,7 +37,7 @@ export default {
     this.questions = null;
     watchEffect(() => {
       this.isQuestionLoading = true;
-      QuestionService.getQuestions(this.limit, this.page)
+      QuestionService.getQuestions(this.limit, this.page, name)
         .then((response) => {
           this.questions = response.data;
           this.totalQuestions = response.headers["x-total-count"];
@@ -60,3 +61,4 @@ export default {
   color: #2c3e50;
 }
 </style>
+-->

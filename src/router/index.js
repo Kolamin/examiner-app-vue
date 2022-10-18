@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Questions from "@/views/Questions";
+//import Questions from "@/views/Questions";
 import Home from "@/views/Home";
 import Signup from "@/views/Signup";
 import Login from "@/views/Login";
@@ -20,12 +20,12 @@ const routes = [
     name: "Login",
     component: Login,
   },
-  {
-    path: "/iquestions",
+  /*{
+    path: "/questions",
     name: "Questions",
     component: Questions,
     props: (route) => ({ page: parseInt(route.query.page) || 1 }),
-  },
+  },*/
 ];
 
 const router = createRouter({
