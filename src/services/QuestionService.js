@@ -11,7 +11,7 @@ const apiClient = axios.create({
 
 export default {
   getQuestions(perPage, page) {
-    return apiClient.get("/questions?_limit=" + perPage + "&_page=" + page);
+    return apiClient.get("/questions/?_limit=" + perPage + "&_page=" + page);
   },
   getQuestion(id) {
     return apiClient.get("/questions/" + id);

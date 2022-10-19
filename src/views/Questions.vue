@@ -17,8 +17,7 @@ import { watchEffect } from "vue";
 import Paginate from "@/components/Paginate";
 
 export default {
-  name: "Questions",
-  props: ["page"],
+  props: ["page", "name"],
   components: {
     Paginate,
     Question,

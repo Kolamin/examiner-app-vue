@@ -21,7 +21,7 @@ const routes = [
     component: Login,
   },
   {
-    path: "/iquestions",
+    path: "/questions",
     name: "Questions",
     component: Questions,
     props: (route) => ({ page: parseInt(route.query.page) || 1 }),
