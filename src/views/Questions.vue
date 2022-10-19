@@ -1,3 +1,4 @@
+<!--
 <template>
   <div v-if="!isQuestionLoading">
     <Question
@@ -17,6 +18,7 @@ import { watchEffect } from "vue";
 import Paginate from "@/components/Paginate";
 
 export default {
+  name: "Questions",
   props: ["page", "name"],
   components: {
     Paginate,
@@ -35,7 +37,7 @@ export default {
     this.questions = null;
     watchEffect(() => {
       this.isQuestionLoading = true;
-      QuestionService.getQuestions(this.limit, this.page)
+      QuestionService.getQuestions(this.limit, this.page, name)
         .then((response) => {
           this.questions = response.data;
           this.totalQuestions = response.headers["x-total-count"];
@@ -59,3 +61,4 @@ export default {
   color: #2c3e50;
 }
 </style>
+-->

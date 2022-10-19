@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: "https://json-server-iquestions.herokuapp.com/",
+  baseURL: "https://json-server-iquestions.herokuapp.com",
   withCredentials: false,
   headers: {
     Accept: "application/json",
@@ -10,8 +10,8 @@ const apiClient = axios.create({
 });
 
 export default {
-  getQuestions(perPage, page) {
-    return apiClient.get("/questions/?_limit=" + perPage + "&_page=" + page);
+  getQuestions(perPage, page, name) {
+    return apiClient.get("/" + name + "?_limit=" + perPage + "&_page=" + page);
   },
   getQuestion(id) {
     return apiClient.get("/questions/" + id);

@@ -1,30 +1,30 @@
 <template>
   <div v-if="user">
     <div>
-      <label for="sec">Выберите раздел</label>
-      <select id="sec" v-model="section" @change="onChange">
+      <label for="sect">Выберите раздел:</label>
+      <select id="sect" v-model="section">
         <option value="questions">А.1. Основы промышленной безопасности</option>
         <option value="hquestions">
-          ЭБ 172.15 Эксплуатация тепловых энергоустановок и тепловых сетей
+          ЭБ 172.15. Эксплуатация тепловых энергоустановок и тепловых сетей
         </option>
       </select>
     </div>
-    <div>
+    <div v-if="section !== undefined">
       <Question
         v-for="question in questions"
         :question="question"
         :key="question.id"
       />
-    </div>
-    <div class="page__wrapper">
-      <div
-        v-for="pageNumber in totalPages"
-        :key="pageNumber"
-        class="page"
-        :class="{ 'current-page': page === pageNumber }"
-        @click="changePage(pageNumber)"
-      >
-        {{ pageNumber }}
+      <div class="page__wrapper">
+        <div
+          v-for="pageNumber in totalPages"
+          :key="pageNumber"
+          class="page"
+          :class="{ 'current-page': page === pageNumber }"
+          @click="changePage(pageNumber)"
+        >
+          {{ pageNumber }}
+        </div>
       </div>
     </div>
   </div>
@@ -39,58 +39,69 @@
 
 <script>
 import { useStore } from "vuex";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
+import Question from "../components/Question";
 import axios from "axios";
-import Question from "@/components/Question";
-
 export default {
   components: {
     Question,
   },
   setup() {
     const store = useStore();
-    const section = ref("");
     const questions = ref([]);
+    const section = ref(undefined);
     const page = ref(1);
-    const limit = ref(3);
+    const perPage = ref(10);
     const totalPages = ref(0);
+    const totalQuestions = ref(0);
 
-    function onChange() {
-      console.log(section.value);
-      fetchQuestions();
-    }
-
-    function changePage(pageNumber) {
-      page.value = pageNumber.value;
-    }
+    const instance = axios.create({
+      baseURL: "https://json-server-iquestions.herokuapp.com",
+      timeout: 40000,
+      withCredentials: false,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
 
     async function fetchQuestions() {
       try {
-        const result = await axios.get(
-          "https://json-server-iquestions.herokuapp.com/" + section.value + "/",
-          {
-            params: {
-              _page: page.value,
-              _limit: limit.value,
-            },
-          }
+        questions.value = null;
+        const response = await instance.get(
+          "/" +
+            section.value +
+            "?_limit=" +
+            perPage.value +
+            "&_page=" +
+            page.value
         );
-        totalPages.value = Math.ceil(
-          result.headers["x-total-count"] / limit.value
-        );
-        questions.value = result.data;
-      } catch (err) {
-        alert("Ошибка");
+        questions.value = response.data;
+        totalQuestions.value = response.headers["x-total-count"];
+        totalPages.value = Math.ceil(totalQuestions.value / perPage.value);
+      } catch (e) {
+        console.log(e);
       }
     }
+
+    function changePage(pageNumber) {
+      page.value = pageNumber;
+    }
+
+    watch([section, page], (newValue, prevValue) => {
+      console.log(newValue, prevValue);
+      fetchQuestions();
+    });
 
     return {
       user: computed(() => store.state.user),
       questions,
       section,
-      onChange,
-      totalPages,
+      fetchQuestions,
       page,
+      perPage,
+      totalQuestions,
+      totalPages,
       changePage,
     };
   },
