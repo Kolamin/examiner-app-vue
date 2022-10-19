@@ -15,16 +15,16 @@
         :question="question"
         :key="question.id"
       />
-      <div class="page__wrapper">
-        <div
-          v-for="pageNumber in totalPages"
-          :key="pageNumber"
-          class="page"
-          :class="{ 'current-page': page === pageNumber }"
-          @click="changePage(pageNumber)"
-        >
-          {{ pageNumber }}
-        </div>
+    </div>
+    <div class="page__wrapper">
+      <div
+        v-for="pageNumber in totalPages"
+        :key="pageNumber"
+        class="page"
+        :class="{ 'current-page': page === pageNumber }"
+        @click="changePage(pageNumber)"
+      >
+        {{ pageNumber }}
       </div>
     </div>
   </div>
@@ -42,6 +42,7 @@ import { useStore } from "vuex";
 import { computed, ref, watch } from "vue";
 import Question from "../components/Question";
 import axios from "axios";
+
 export default {
   components: {
     Question,
@@ -56,7 +57,7 @@ export default {
     const totalQuestions = ref(0);
 
     const instance = axios.create({
-      baseURL: "https://json-server-iquestions.herokuapp.com",
+      baseURL: "https://json-server-iquestions.herokuapp.com/",
       timeout: 40000,
       withCredentials: false,
       headers: {
@@ -68,14 +69,12 @@ export default {
     async function fetchQuestions() {
       try {
         questions.value = null;
-        const response = await instance.get(
-          "/" +
-            section.value +
-            "?_limit=" +
-            perPage.value +
-            "&_page=" +
-            page.value
-        );
+        const response = await instance.get(section.value, {
+          params: {
+            _limit: perPage.value,
+            _page: page.value,
+          },
+        });
         questions.value = response.data;
         totalQuestions.value = response.headers["x-total-count"];
         totalPages.value = Math.ceil(totalQuestions.value / perPage.value);
@@ -97,7 +96,6 @@ export default {
       user: computed(() => store.state.user),
       questions,
       section,
-      fetchQuestions,
       page,
       perPage,
       totalQuestions,
@@ -107,21 +105,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.page__wrapper {
-  display: flex;
-  margin-top: 15px;
-}
-
-.page {
-  border: 1px solid black;
-  padding: 10px;
-  margin-right: 8px;
-  cursor: pointer;
-}
-
-.current-page {
-  border: 4px solid teal;
-}
-</style>
